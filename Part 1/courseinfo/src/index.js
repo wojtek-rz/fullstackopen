@@ -2,56 +2,56 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const Header = (props) => (
-  <div>
-    <h1>{props.name}</h1>
-  </div>
+  <h1>{props.name}</h1>
 )
 
 const Part = (props) => (
-  <>
-    <p>{props.name} {props.exercises}</p>
-  </>
+  <p>{props.name} {props.exercises}</p>
 )
 
 const Content = (props) => (
   <div>
-    <Part name={props.parts.part1} exercises={props.exercises.exercises1} />
-    <Part name={props.parts.part2} exercises={props.exercises.exercises2} />
-    <Part name={props.parts.part3} exercises={props.exercises.exercises3} />
+    <Part name={props.parts[0].name} exercises={props.parts[0].exercises} />
+    <Part name={props.parts[1].name} exercises={props.parts[1].exercises} />
+    <Part name={props.parts[2].name} exercises={props.parts[2].exercises} />
   </div>
 )
 
-const Total = (props) => (
-  <div>
-    <p>Number of exercises {props.total}</p>
-  </div>
-)
+const Total = (props) => {
+  console.log(props)
+  const total = props.parts.map((part) => (part.exercises)).reduce((total, x) => (x + total))
 
-const App = () => {
-  const course = 'Half Stack application development'
-  const part1 = 'Fundamentals of React'
-  const exercises1 = 10
-  const part2 = 'Using props to pass data'
-  const exercises2 = 7
-  const part3 = 'State of a component'
-  const exercises3 = 14
+  return (
+    <div>
+      <p>Number of exercises {total}</p>
+    </div>
+  )
+}
 
-  const parts = {
-    part1,
-    part2,
-    part3,
-  }
-  const exercises = {
-    exercises1,
-    exercises2,
-    exercises3,
+const App = () => {  
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      },
+    ]
   }
 
   return (
     <div>
-      <Header name={course}/>
-      <Content parts={parts} exercises={exercises}/>
-      <Total total={exercises3 + exercises2 + exercises1}/>
+      <Header name={course.name}/>
+      <Content parts={course.parts}/>
+      <Total parts={course.parts}/>
     </div>
   )
 }
