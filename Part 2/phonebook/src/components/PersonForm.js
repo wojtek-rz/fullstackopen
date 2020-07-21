@@ -1,9 +1,13 @@
 import React from 'react'
 
 const PersonForm = ({addNewPerson, newName, handleNameChange, newNumber, handleNumberChange}) => {
+    const someStyling = {
+      marginBottom: '0.3em',
+    }
+  
     return (
         <form onSubmit={addNewPerson}>
-        <div>
+        <div style={someStyling}>
           <label htmlFor="name">name: </label>
           <input
             id="name"
@@ -11,7 +15,7 @@ const PersonForm = ({addNewPerson, newName, handleNameChange, newNumber, handleN
             onChange={ handleNameChange }
           />
         </div>        
-        <div>
+        <div style={someStyling}>
           <label htmlFor="number">number: </label>
           <input
             id="number"
