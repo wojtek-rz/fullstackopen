@@ -13,6 +13,7 @@ const App = () => {
       .get('https://restcountries.eu/rest/v2/all')
       .then((response) => {
         console.log('promise fulfilled')
+        console.log(response.data)
         setCountries(response.data)
       })
   }, [])
