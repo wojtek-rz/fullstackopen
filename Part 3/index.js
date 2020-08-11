@@ -9,13 +9,14 @@ const Person = require('./models/person')
 const app = express()
 
 app.use(cors())
-app.use(express.static('build'))
 app.use(express.json())
 
 morgan.token('json', (req, res) => (req.method === 'POST' || req.method === 'PUT'
   ? JSON.stringify(req.body)
   : ''))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :json'))
+
+app.use(express.static('build'))
 
 app.get('/', (req, res) => {
   res.end('Hello there!')
