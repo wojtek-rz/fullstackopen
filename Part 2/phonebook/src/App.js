@@ -16,9 +16,9 @@ const App = () => {
   useEffect(() => {
     console.log('effect')
     personService
-      .getAll().then( persons => {
+      .getAll().then( returnedPersons => {
         console.log('promise fulfilled')
-        setPersons(persons)
+        setPersons(returnedPersons)
       })
   }, [])
   console.log('rendering', persons.length, 'persons')
@@ -27,6 +27,13 @@ const App = () => {
     persons.filter((person) => (
       person.name.toLowerCase().includes(filter.toLowerCase())))
     : persons)
+
+  const showNotification = (text, style) => {
+    setNotif({text: text, style: style})          
+    setTimeout(() => {
+      setNotif({text: null})
+    }, 5000)
+  } 
 
   const addNewPerson = (event) => {
     event.preventDefault()
@@ -41,17 +48,10 @@ const App = () => {
         
         personService.update(formerPerson.id, changedPerson).then((returnedPerson) => {
           setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
-          setNotif({text: `The number of ${returnedPerson.name} replaced`,
-                    style: 'green'})
-          setTimeout(() => {
-            setNotif({text: null})
-          }, 5000)
+          showNotification(`The number of ${returnedPerson.name} replaced`, 'green')
         }).catch(error => {
-          setNotif({text: `Information of ${formerPerson.name} has been removed from server`,
-          style: 'red'})
-          setTimeout(() => {
-            setNotif({text: null})
-          }, 5000)
+          showNotification(error.response.data.error, 'red')
+          //showNotification(`Information of ${formerPerson.name} has been removed from server`, 'red')
         })
       }
     } else{
@@ -64,17 +64,19 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
         setNewName('')
         setNewNumber('')
-        setNotif({text: `Added ${returnedPerson.name}`, style: 'green'})
-        setTimeout(() => {
-          setNotif({text: null})
-        }, 5000)
+        showNotification(`Added ${returnedPerson.name}`, 'green')
+      }).catch(error => {
+        console.log(JSON.stringify(error))
+        showNotification(error.response.data.error, 'red')
       })
     }
   }
   const deletePerson = (id) => {
-    if (window.confirm(`Delete ${persons.find(person => person.id === id).name} ?`)) {
+    const personToDelete = persons.find(person => person.id === id)
+    if (window.confirm(`Delete ${personToDelete.name} ?`)) {
       personService.del(id).then(response => {
         setPersons(persons.filter(person => person.id !== id))
+        showNotification(`Removed ${personToDelete.name}`, 'green')
       })
     }
   }
