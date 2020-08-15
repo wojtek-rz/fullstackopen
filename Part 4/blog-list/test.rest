@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "RE:ZERO anime",
+  "author": "Natsuki Subaru",
+  "url": "https://en.wikipedia.org/wiki/Re:Zero_−_Starting_Life_in_Another_World",
+  "likes": 50213
+}
