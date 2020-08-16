@@ -10,7 +10,21 @@ const requestLogger = (req, res, next) => {
 }
 
 const unknownEndpoint = (req, res) => {
-  res.json({ error: 'unknown endpoint' })
+  res.status(404).json({ error: 'unknown endpoint' })
 }
 
-module.exports = { requestLogger, unknownEndpoint }
+const errorHandler = (error, req, res, next) => {
+  logger.error(error.name, ' : ', error.message)
+
+  if (error.name === 'ValidationError') {
+    return res.status(400).send({ error: error.message })
+  }
+
+  next(error)
+}
+
+module.exports = {
+  requestLogger,
+  unknownEndpoint,
+  errorHandler
+}
