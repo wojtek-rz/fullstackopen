@@ -16,5 +16,7 @@ module.exports = {
     'no-console': 0,
     semi: 0,
     'comma-dangle': 0,
+    'no-param-reassign': 0,
+    'arrow-parens': 0,
   },
 };
