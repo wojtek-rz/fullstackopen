@@ -8,15 +8,28 @@ const helper = require('./test_helper')
 
 const api = supertest(app)
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-
-  const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog))
-  const promiseArray = blogObjects.map((blog) => blog.save())
-  await Promise.all(promiseArray)
+let authorization
+beforeAll(async () => {
+  await User.deleteMany({})
+  const testUser = new User({
+    username: 'test',
+    passwordHash: await bcrypt.hash('test', 10)
+  })
+  await testUser.save()
+  const result = await api
+    .post('/api/login')
+    .send({ username: 'test', password: 'test' })
+  authorization = `bearer ${result.body.token}`
 })
 
-describe('Notes operations: ', () => {
+describe('Operations on initial blogs in db: ', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+
+    const blogObjects = helper.initialBlogs.map((blog) => new Blog(blog))
+    const promiseArray = blogObjects.map((blog) => blog.save())
+    await Promise.all(promiseArray)
+  })
   test('blogs are returned as JSON', async () => {
     await api
       .get('/api/blogs')
@@ -37,7 +50,19 @@ describe('Notes operations: ', () => {
 
     expect(blogs[0].id).toBeDefined()
   })
+})
 
+describe('CRUD operations on blogs db: ', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({})
+    const users = await User.find({})
+
+    // adding 'user' property to blog objects
+    const blogsWithUser = helper.initialBlogs.map((b) => ({ ...b, user: users[0]._id }))
+    const blogObjects = blogsWithUser.map((blog) => new Blog(blog))
+    const promiseArray = blogObjects.map((blog) => blog.save())
+    await Promise.all(promiseArray)
+  })
   test('api properly adds new blog', async () => {
     const blog = {
       title: 'About Whisper of the Heart',
@@ -48,6 +73,7 @@ describe('Notes operations: ', () => {
     await api
       .post('/api/blogs')
       .send(blog)
+      .set('Authorization', authorization)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -56,7 +82,7 @@ describe('Notes operations: ', () => {
     expect(currentBlogs.map((b) => b.url)).toContain('https://en.wikipedia.org/wiki/Whisper_of_the_Heart')
   })
 
-  test('when missing likes property, api sets it to zero', async () => {
+  test('when missing "likes" property, api sets it to zero', async () => {
     const blog = {
       title: 'About Kikis Delivery Service',
       author: 'Hayao Miyazaki',
@@ -66,10 +92,27 @@ describe('Notes operations: ', () => {
     const response = await api
       .post('/api/blogs')
       .send(blog)
+      .set('Authorization', authorization)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     expect(response.body.likes).toBe(0)
+  })
+  test('when no authorization provided response status 401', async () => {
+    const initialBlogs = await helper.blogsInDb()
+    const blog = {
+      title: 'About Kikis Delivery Service',
+      author: 'Hayao Miyazaki',
+      url: 'https://en.wikipedia.org/wiki/Kiki%27s_Delivery_Service',
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(initialBlogs.length)
   })
 
   test('when missing title or url response status 400', async () => {
@@ -80,6 +123,7 @@ describe('Notes operations: ', () => {
     await api
       .post('/api/blogs')
       .send(blog)
+      .set('Authorization', authorization)
       .expect(400)
 
     blog = {
@@ -89,16 +133,18 @@ describe('Notes operations: ', () => {
     await api
       .post('/api/blogs')
       .send(blog)
+      .set('Authorization', authorization)
       .expect(400)
   })
 
   test('api deletes blog', async () => {
-    const blogs = await helper.blogsInDb()
+    const initialBlogs = await helper.blogsInDb()
     await api
-      .delete(`/api/blogs/${blogs[0].id}`)
+      .delete(`/api/blogs/${initialBlogs[0].id}`)
+      .set('Authorization', authorization)
       .expect(204)
 
-    expect(await helper.blogsInDb()).toHaveLength(blogs.length - 1)
+    expect(await helper.blogsInDb()).toHaveLength(initialBlogs.length - 1)
   })
 
   test('api updates the blog', async () => {
@@ -121,7 +167,7 @@ describe('Notes operations: ', () => {
   })
 })
 
-describe('Users operations: ', () => {
+describe('Operations on users db: ', () => {
   beforeEach(async () => {
     await User.deleteMany({})
 

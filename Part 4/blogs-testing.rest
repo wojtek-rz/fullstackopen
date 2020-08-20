@@ -1,0 +1,11 @@
+POST  http://localhost:3003/api/blogs/
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkluZXoiLCJpZCI6IjVmM2QyNjY4MDA1YTgzMzhlODRmMzViNCIsImlhdCI6MTU5NzkyODQ4NH0.9VOTcPjptXPCuBdknewhL9Sg7uPTt33rvlWkgb5Yx8w
+
+{
+  "title": "Kaguya Sama",
+  "author": "Miyuki Shirogane",
+  "url": "https://en.wikipedia.org/wiki/Kaguya-sama:_Love_Is_War",
+  "likes": 15111,
+  "user": "5f3d2959e2d29252f47eed07"
+}

@@ -21,6 +21,8 @@ const errorHandler = (error, req, res, next) => {
     return res.status(400).send({ error: error.message })
   } if (error.name === 'JsonWebTokenError') {
     return res.status(401).send({ error: error.message })
+  } if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
   }
 
   next(error)
