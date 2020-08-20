@@ -18,5 +18,6 @@ module.exports = {
     'comma-dangle': 0,
     'no-param-reassign': 0,
     'arrow-parens': 0,
+    'no-underscore-dangle': 0,
   },
 };

@@ -121,43 +121,85 @@ describe('Notes operations: ', () => {
   })
 })
 
-// describe('Users operations: ', () => {
-//   beforeEach(async () => {
-//     await User.deleteMany({})
+describe('Users operations: ', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
 
-//     const passwordHash = bcrypt.hash('secret', 10)
-//     const user = new User({ username: 'root', passwordHash })
-//     await user.save()
-//   })
+    const passwordHash = await bcrypt.hash('secret', 10)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save()
+  })
 
-//   test.only('creation succeeds with fresh username', async () => {
-//     const usersAtStart = await helper.usersInDB()
-//     const newUser = { username: 'Anna', password: '1234' }
-//     await api
-//       .post('/api/users')
-//       .send(newUser)
-//       .expect(200)
+  test('creation succeeds with fresh username', async () => {
+    const usersAtStart = await helper.usersInDB()
+    const newUser = { username: 'Anna', password: '1234' }
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
 
-//     const usersAtEnd = await helper.usersInDB()
-//     expect(usersAtEnd.length).toBe(usersAtStart.length + 1)
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd.length).toBe(usersAtStart.length + 1)
 
-//     const usernames = usersAtEnd.map(u => u.username)
-//     expect(usernames).toContain(newUser.username)
-//   })
-//   test('creation fails with taken username', async () => {
-//     const usersAtStart = await helper.usersInDB()
-//     const newUser = { username: 'root', password: '1234' }
-//     const result = await api
-//       .post('/api/users')
-//       .send(newUser)
-//       .expect(400)
-//       .expect('Content-Type', /application\/json/)
-//     expect(result.body.error).toContain('password length must be greater than 3')
+    const usernames = usersAtEnd.map(u => u.username)
+    expect(usernames).toContain(newUser.username)
+  })
+  test('creation fails with taken username', async () => {
+    const usersAtStart = await helper.usersInDB()
+    const newUser = { username: 'root', password: '1234' }
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('expected `username` to be unique')
 
-//     const usersAtEnd = await helper.usersInDB()
-//     expect(usersAtEnd.length).toBe(usersAtStart.length)
-//   })
-// })
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd.length).toBe(usersAtStart.length)
+  })
+  test('creation fails with no username or password', async () => {
+    const usersAtStart = await helper.usersInDB()
+    let newUser = { username: 'root' }
+    let result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('provided or length was too short')
+
+    newUser = { password: '1234' }
+    result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('`username` is required')
+
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd.length).toBe(usersAtStart.length)
+  })
+  test('creation fails with too short username or password', async () => {
+    const usersAtStart = await helper.usersInDB()
+    let newUser = { username: 'rooten', password: '12' }
+    let result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('provided or length was too short')
+
+    newUser = { username: 'ro', password: '1234' }
+    result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('is shorter than the minimum allowed length')
+
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd.length).toBe(usersAtStart.length)
+  })
+})
 
 afterAll(() => {
   mongoose.connection.close()
