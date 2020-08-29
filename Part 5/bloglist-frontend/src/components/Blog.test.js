@@ -18,7 +18,7 @@ afterEach(() => {
 test('by default blog displays title and author, but not url and likes', () => {
   const component = render(
     <Blog blog={blog} currentUser={{}} removeBlogFunc={() => (0)} handleNewLike={() => (0)}/> )
-  const div = component.container.querySelector('#testDiv')
+  const div = component.container.querySelector('.blogDiv')
   expect(div).toHaveTextContent(blog.title)
   expect(div).toHaveTextContent(blog.author)
   expect(div).not.toHaveTextContent(blog.url)
@@ -29,7 +29,7 @@ test('by default blog displays title and author, but not url and likes', () => {
 test('when button clicked Blog displays url and likes', () => {
   const component = render(
     <Blog blog={blog} currentUser={{}} removeBlogFunc={() => (0)} handleNewLike={() => (0)}/> )
-  const div = component.container.querySelector('#testDiv')
+  const div = component.container.querySelector('.blogDiv')
   fireEvent.click(component.getByText('show'))
 
   expect(div).toHaveTextContent(blog.url)

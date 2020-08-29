@@ -13,7 +13,7 @@ blogsRouter.post('', async (request, response) => {
 
   const decodedToken = jwt.verify(token, process.env.SECRET)
   const user = await User.findById(decodedToken.id)
-
+  if (!user) { return response.status(400).json({ error: 'invalid token' })}
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -25,7 +25,7 @@ blogsRouter.post('', async (request, response) => {
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
-  response.status(201).json(savedBlog)
+  response.status(201).json(await savedBlog.populate('user', { name: 1, username: 1 }).execPopulate())
 })
 
 blogsRouter.delete('/:id', async (req, res) => {

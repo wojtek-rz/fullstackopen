@@ -1,5 +1,5 @@
 const info = (...params) => {
-  if (process.env.NODE_ENV !== 'test') {
+  if (true || process.env.NODE_ENV !== 'test') {
     console.log(...params)
   }
 }

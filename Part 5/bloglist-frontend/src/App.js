@@ -12,6 +12,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const notificationRef = useRef()
+  const togglableRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -47,8 +48,10 @@ const App = () => {
       const returnedBlog = await blogService.create(blogObject)
       console.log('created new blog', returnedBlog)
       notificationRef.current.setSuccesNotification(`A new blog: "${returnedBlog.title}" by ${returnedBlog.author} has been created`)
+      togglableRef.current.toggleVisibility()
       setBlogs(blogs.concat(returnedBlog))
     } catch (error) {
+      console.log(error)
       notificationRef.current.setErrorNotification(error.response.data.error)
     }
   }
@@ -95,10 +98,10 @@ const App = () => {
         <h1>Blogs</h1>
         <Notification ref={notificationRef} />
         { loggedIn() }
-        <Togglable buttonLabel={'new blog'}>
+        <Togglable buttonLabel={'new blog'} ref={togglableRef}>
           <BlogForm addNewBlog={addNewBlog} />
         </Togglable>
-        <div style={{ marginTop: '1em' }}>
+        <div style={{ marginTop: '1em' }} id="blogList">
           {blogs.map(blog =>
             <Blog key={blog.id}
               blog={blog}

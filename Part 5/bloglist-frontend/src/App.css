@@ -10,3 +10,12 @@ body {
   background-color: papayawhip;
   color: palevioletred
 }
+
+.blogDiv {
+  color: white;
+  background-color: palevioletred;
+  padding: .7em;
+  border: 2px black;
+  margin-top: 7px;
+  border-radius: 7px;
+}

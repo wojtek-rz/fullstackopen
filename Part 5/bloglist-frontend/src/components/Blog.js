@@ -1,21 +1,8 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import PropTypes from 'prop-types'
-
-const StyledDiv = styled.div`
-  color: white;
-  background-color: palevioletred;
-  padding: .7em;
-  border: 2px black;
-  margin-top: 7px;
-  border-radius: 7px;
-`
-StyledDiv.displayName='testDiv'
 
 const Blog = ({ blog, currentUser, removeBlogFunc, handleNewLike }) => {
   const [showDetails, setShowDetails] = useState('')
-
-
 
   const handleRemove = () => {
     if (window.confirm(`Remove '${blog.title}' by ${blog.author}`)) {
@@ -24,7 +11,7 @@ const Blog = ({ blog, currentUser, removeBlogFunc, handleNewLike }) => {
   }
 
   return (
-    <StyledDiv id="testDiv">
+    <div className="blogDiv">
       <div style={{ fontSize: '1.05rem' }}>
         {blog.title} {blog.author}
         <button onClick={() => setShowDetails(!showDetails)} style={{ marginLeft: '.3em' }}>
@@ -45,7 +32,7 @@ const Blog = ({ blog, currentUser, removeBlogFunc, handleNewLike }) => {
           )}
         </div>
       )}
-    </StyledDiv>
+    </div>
   )
 }
 

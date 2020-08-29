@@ -16,12 +16,12 @@ const LoginForm = ({ addNewBlog }) => {
 
   return (
     <div>
-      <h2>add new blog</h2>
+      <h2>add a new blog</h2>
       <form onSubmit={handleSubmit} autoComplete="off">
         <div>
           <label htmlFor="title">title</label>
           <input
-            name="title" id="title"
+            name="title"
             type="text"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
@@ -30,7 +30,7 @@ const LoginForm = ({ addNewBlog }) => {
         <div>
           <label htmlFor="author">author</label>
           <input
-            name="author" id="author"
+            name="author"
             type="text"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
@@ -39,7 +39,7 @@ const LoginForm = ({ addNewBlog }) => {
         <div>
           <label htmlFor="url">url</label>
           <input
-            name="url" id="url"
+            name="url"
             type="text"
             value={url}
             onChange={({ target }) => setUrl(target.value)}

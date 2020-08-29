@@ -14,9 +14,9 @@ test('Making new blog properly sends data to function', () => {
     <BlogForm addNewBlog={addNewBlog} />
   )
   const form = component.container.querySelector('form')
-  const authorInput = component.container.querySelector('#author')
-  const titleInput = component.container.querySelector('#title')
-  const urlInput = component.container.querySelector('#url')
+  const authorInput = component.container.querySelector('input[name="author"]')
+  const titleInput = component.container.querySelector('input[name="title"]')
+  const urlInput = component.container.querySelector('input[name="url"]')
 
   fireEvent.change(authorInput, {
     target: { value: newBlog.author }
