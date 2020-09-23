@@ -1,0 +1,64 @@
+{
+  "anecdotes": [
+    {
+      "content": "If it hurts, do it more often",
+      "id": "47145",
+      "votes": 0
+    },
+    {
+      "content": "Adding manpower to a late software project makes it later!",
+      "id": "21149",
+      "votes": 366
+    },
+    {
+      "content": "The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.",
+      "id": "69581",
+      "votes": 54
+    },
+    {
+      "content": "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+      "id": "36975",
+      "votes": 19
+    },
+    {
+      "content": "Premature optimization is the root of all evil.",
+      "id": "25170",
+      "votes": 1
+    },
+    {
+      "content": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.",
+      "id": "98312",
+      "votes": 10
+    },
+    {
+      "content": "Inez denied going on ball with another person",
+      "votes": 2,
+      "id": "Vq4iv5h"
+    },
+    {
+      "content": "Inez denied going on ball with another person",
+      "votes": 5,
+      "id": "dyX2eBR"
+    },
+    {
+      "content": "After I saw her I were in daze for three days",
+      "votes": 1,
+      "id": "BeYQN6N"
+    },
+    {
+      "content": "At first I was dazed by the beauty of her",
+      "votes": 1,
+      "id": "CM7jkeI"
+    },
+    {
+      "content": "",
+      "votes": 0,
+      "id": "NH7C9E0"
+    },
+    {
+      "content": "By nie popasc w melancholie niespelnionych marzen",
+      "votes": 19,
+      "id": "7qFvcoq"
+    }
+  ]
+}
